@@ -1,5 +1,6 @@
 package br.com.nemeia.pc.webscraper.service;
 
+import br.com.nemeia.pc.webscraper.enums.Store;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class KabumWebScraperService implements GpuWebscraperService {
+public class KabumWebScraperService implements WebScraperService {
 
     @Autowired
     private GpuService gpuService;
@@ -22,17 +23,18 @@ public class KabumWebScraperService implements GpuWebscraperService {
         return "https://www.kabum.com.br/hardware/placa-de-video-vga?page_number=1&page_size=100&facet_filters=&sort=most_searched";
     }
 
-    @Scheduled(fixedRate = 1000 * 60 * 1)
+    @Scheduled(fixedRate = 1000 * 60 * 10)
     public void obtemModelosGpu() throws JSONException, IOException {
-        JSONArray gpuModels = extractGpuModels(getGpuModelsFromPage());
+        JSONArray gpuModels = extractModels(getModelsFromPage());
         for (int i = 0; i < gpuModels.length(); i++) {
             JSONObject gpuModel = gpuModels.getJSONObject(i);
-            gpuService.saveKabumJson(gpuModel);
+            setStore(gpuModel);
+            gpuService.sendToKafka(gpuModel);
         }
     }
 
     @Override
-    public JSONArray extractGpuModels(Document document) throws JSONException {
+    public JSONArray extractModels(Document document) throws JSONException {
         Element element = document.getElementById("__NEXT_DATA__");
         assert element != null;
         String content = element.html();
@@ -41,6 +43,11 @@ public class KabumWebScraperService implements GpuWebscraperService {
         JSONObject pageProps = json.getJSONObject("props").getJSONObject("pageProps");
         JSONObject data = new JSONObject(pageProps.get("data").toString());
         return data.getJSONObject("catalogServer").getJSONArray("data");
+    }
+
+    @Override
+    public Store getStoreName() {
+        return Store.KABUM;
     }
 
 }
