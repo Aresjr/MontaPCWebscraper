@@ -12,7 +12,6 @@ public class GpuService {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendToKafka(JSONObject gpuModel) {
-        //TODO - implement
         kafkaTemplate.send("pc.gpu", gpuModel.toString());
     }
 
