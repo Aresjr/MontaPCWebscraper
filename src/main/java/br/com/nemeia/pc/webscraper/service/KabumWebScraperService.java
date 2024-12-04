@@ -28,8 +28,7 @@ public class KabumWebScraperService implements WebScraperService {
         JSONArray gpuModels = extractModels(getModelsFromPage());
         for (int i = 0; i < gpuModels.length(); i++) {
             JSONObject gpuModel = gpuModels.getJSONObject(i);
-            setStore(gpuModel);
-            gpuService.sendToKafka(gpuModel);
+            gpuService.sendToKafka(gpuModel, Store.KABUM);
         }
     }
 
@@ -43,11 +42,6 @@ public class KabumWebScraperService implements WebScraperService {
         JSONObject pageProps = json.getJSONObject("props").getJSONObject("pageProps");
         JSONObject data = new JSONObject(pageProps.get("data").toString());
         return data.getJSONObject("catalogServer").getJSONArray("data");
-    }
-
-    @Override
-    public Store getStoreName() {
-        return Store.KABUM;
     }
 
 }

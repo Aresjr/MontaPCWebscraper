@@ -53,6 +53,11 @@
 			<version>3.3.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-json</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+		<dependency>
 			<groupId>br.com.nemeia.pc</groupId>
 			<artifactId>webscraper</artifactId>
 			<version>0.0.1</version>
