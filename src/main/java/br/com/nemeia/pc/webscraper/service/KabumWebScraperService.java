@@ -1,6 +1,8 @@
 package br.com.nemeia.pc.webscraper.service;
 
 import br.com.nemeia.pc.webscraper.enums.Store;
+import br.com.nemeia.pc.webscraper.model.Gpu;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import java.io.IOException;
 @Component
 public class KabumWebScraperService implements WebScraperService {
 
+    private final ObjectMapper mapper = new ObjectMapper();
+
     @Autowired
     private GpuService gpuService;
 
@@ -25,10 +29,13 @@ public class KabumWebScraperService implements WebScraperService {
 
     @Scheduled(fixedRate = 1000 * 60 * 10)
     public void obtemModelosGpu() throws JSONException, IOException {
+        //TODO - make pagination
         JSONArray gpuModels = extractModels(getModelsFromPage());
         for (int i = 0; i < gpuModels.length(); i++) {
             JSONObject gpuModel = gpuModels.getJSONObject(i);
-            gpuService.sendToKafka(gpuModel, Store.KABUM);
+            Gpu gpu = mapper.readValue(gpuModel.toString(), Gpu.class);
+            gpu.setStore(Store.KABUM);
+            gpuService.sendToKafka(gpu);
         }
     }
 

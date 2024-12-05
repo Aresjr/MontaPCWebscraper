@@ -17,9 +17,7 @@ public class GpuService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void sendToKafka(JSONObject gpuModel, Store store) throws JsonProcessingException {
-        Gpu gpu = mapper.readValue(gpuModel.toString(), Gpu.class);
-        gpu.setStore(store);
+    public void sendToKafka(Gpu gpu) throws JsonProcessingException {
         kafkaTemplate.send("pc.gpu", mapper.writeValueAsString(gpu));
     }
 
