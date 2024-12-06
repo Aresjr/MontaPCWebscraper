@@ -59,8 +59,8 @@
 		</dependency>
 		<dependency>
 			<groupId>br.com.nemeia.pc</groupId>
-			<artifactId>webscraper</artifactId>
-			<version>0.0.1</version>
+			<artifactId>commons</artifactId>
+			<version>0.0.2</version>
 		</dependency>
 	</dependencies>
 	<build>
