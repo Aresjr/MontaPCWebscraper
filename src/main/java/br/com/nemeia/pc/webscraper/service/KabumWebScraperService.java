@@ -1,7 +1,7 @@
 package br.com.nemeia.pc.webscraper.service;
 
-import br.com.nemeia.pc.webscraper.enums.Store;
-import br.com.nemeia.pc.webscraper.model.Gpu;
+import br.com.nemeia.pc.commons.enums.Store;
+import br.com.nemeia.pc.commons.model.Gpu;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
